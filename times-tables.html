@@ -12,14 +12,13 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="text/babel">
         class TimesTables extends React.Component {
-            constructor(props) {
-                super(props);
-                this.state = {
-                    num1: Math.ceil(Math.random() * 9),
-                    num2: Math.ceil(Math.random() * 9),
-                    value: '',
-                    result: '',
-                }
+            inputRef = React.createRef();
+
+            state = {
+                num1: Math.ceil(Math.random() * 9),
+                num2: Math.ceil(Math.random() * 9),
+                value: '',
+                result: '',
             }
 
             onChange = (e) => this.setState({ value: e.target.value })
@@ -27,30 +26,38 @@
             onSubmit = (e) => {
                 e.preventDefault()
                 if (parseInt(this.state.value) === parseInt(this.state.num1) * parseInt(this.state.num2)) {
-                    this.setState({
+                    this.setState((prev) =>
+                    ({
                         num1: Math.ceil(Math.random() * 9),
                         num2: Math.ceil(Math.random() * 9),
                         value: '',
-                        result: 'Correct 🎉'
+                        result: prev.value + ' is Correct 🎉'
                     })
+                    )
+                    this.inputRef.current.focus();
                 } else {
                     this.setState({
                         value: '',
                         result: 'Wrong ❌'
                     })
+                    this.inputRef.current.focus();
                 }
             }
 
+            input;
+
+            onRefInput = (c) => { this.input = c }
+
             render() {
                 return (
-                    <div>
+                    <>
                         <div>Multiply {this.state.num1} by {this.state.num2}</div>
                         <form onSubmit={this.onSubmit}>
-                            <input type="number" value={this.state.value} onChange={this.onChange} />
+                            <input ref={this.inputRef} type="number" value={this.state.value} onChange={this.onChange} />
                             <button>Submit</button>
                         </form>
                         <div>{this.state.result}</div>
-                    </div>
+                    </>
                 )
             }
         }
