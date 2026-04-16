@@ -11,56 +11,45 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="text/babel">
-        class TimesTables extends React.Component {
-            inputRef = React.createRef();
+        const TimesTables = () => {
+            const createRandomNum = () => Math.ceil(Math.random() * 9)
+            const [num1, setNum1] = React.useState(createRandomNum)
+            const [num2, setNum2] = React.useState(createRandomNum)
+            const [value, setValue] = React.useState('')
+            const [result, setResult] = React.useState('')
 
-            state = {
-                num1: Math.ceil(Math.random() * 9),
-                num2: Math.ceil(Math.random() * 9),
-                value: '',
-                result: '',
-            }
+            const inputRef = React.useRef()
 
-            onChange = (e) => this.setState({ value: e.target.value })
+            const onChange = (e) => setValue(e.target.value)
 
-            onSubmit = (e) => {
+            const onSubmit = (e) => {
                 e.preventDefault()
-                if (parseInt(this.state.value) === parseInt(this.state.num1) * parseInt(this.state.num2)) {
-                    this.setState((prev) =>
-                    ({
-                        num1: Math.ceil(Math.random() * 9),
-                        num2: Math.ceil(Math.random() * 9),
-                        value: '',
-                        result: prev.value + ' is Correct 🎉'
-                    })
-                    )
-                    this.inputRef.current.focus();
+                if (parseInt(value) === parseInt(num1) * parseInt(num2)) {
+                    setNum1(createRandomNum)
+                    setNum2(createRandomNum)
+                    setResult(value + ' is Correct 🎉')
+                    setValue('')
+                    inputRef.current.focus()
                 } else {
-                    this.setState({
-                        value: '',
-                        result: 'Wrong ❌'
-                    })
-                    this.inputRef.current.focus();
+                    setResult('Wrong ❌')
+                    setValue('')
+                    inputRef.current.focus()
                 }
             }
 
-            input;
-
-            onRefInput = (c) => { this.input = c }
-
-            render() {
-                return (
-                    <>
-                        <div>Multiply {this.state.num1} by {this.state.num2}</div>
-                        <form onSubmit={this.onSubmit}>
-                            <input ref={this.inputRef} type="number" value={this.state.value} onChange={this.onChange} />
-                            <button>Submit</button>
-                        </form>
-                        <div>{this.state.result}</div>
-                    </>
-                )
-            }
+            return (
+                <>
+                    <div>Multiply {num1} by {num2}</div>
+                    <form onSubmit={onSubmit}>
+                        <input ref={inputRef} type="number" value={value} onChange={onChange} />
+                        <button>Submit</button>
+                    </form>
+                    <div>{result}</div>
+                </>
+            )
         }
+
+
     </script>
     <script type="text/babel">
         ReactDOM.createRoot(document.querySelector('#root')).render(<TimesTables />)
