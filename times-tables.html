@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Times Tables</title>
+</head>
+<body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        class TimesTables extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    num1: Math.ceil(Math.random() * 9),
+                    num2: Math.ceil(Math.random() * 9),
+                    value: '',
+                    result: '',
+                }
+            }
+
+            onChange = (e) => this.setState({ value: e.target.value })
+
+            onSubmit = (e) => {
+                e.preventDefault()
+                if (parseInt(this.state.value) === parseInt(this.state.num1) * parseInt(this.state.num2)) {
+                    this.setState({
+                        num1: Math.ceil(Math.random() * 9),
+                        num2: Math.ceil(Math.random() * 9),
+                        value: '',
+                        result: 'Correct 🎉'
+                    })
+                } else {
+                    this.setState({
+                        value: '',
+                        result: 'Wrong ❌'
+                    })
+                }
+            }
+
+            render() {
+                return (
+                    <div>
+                        <div>Multiply {this.state.num1} by {this.state.num2}</div>
+                        <form onSubmit={this.onSubmit}>
+                            <input type="number" value={this.state.value} onChange={this.onChange} />
+                            <button>Submit</button>
+                        </form>
+                        <div>{this.state.result}</div>
+                    </div>
+                )
+            }
+        }
+    </script>
+    <script type="text/babel">
+        ReactDOM.createRoot(document.querySelector('#root')).render(<TimesTables />)
+    </script>
+</body>
+</html>
