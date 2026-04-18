@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   name: 'react-mini-games',
@@ -21,7 +22,22 @@ module.exports = {
         loader: 'babel-loader', // Apply babel-loader to make modern syntax compatible with older browsers
         // Babel options
         options: {
-          presets: ['@babel/preset-env', '@babel/preset-react'],
+          // Presets are a collection of plugins
+          presets: [
+            [
+              '@babel/preset-env', // Automatically support older browsers
+              {
+                targets: {
+                  // target browser
+                  // Support browsers with 5% or more market share in UK
+                  // Support the latest 2 versions of Chrome
+                  browsers: ['> 5% in GB', 'last 2 chrome versions'],
+                },
+                debug: true, // Mainly used for development
+              },
+            ],
+            '@babel/preset-react',
+          ],
         },
       },
     ],
